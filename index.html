@@ -84,7 +84,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 40px;
+      gap: 24px;
+      /* Fluid nav sizing: shrinks with the screen, never below 11px */
+      --nav-fs: clamp(11px, 1.34vw, 0.92rem);
+      --nav-gap: clamp(16px, 2.2vw, 28px);
+      padding: 0 clamp(20px, 3vw, 40px);
       height: 52px;
       background: rgba(246,243,238,0.88);
       backdrop-filter: blur(12px);
@@ -94,7 +98,8 @@
 
     .topnav-name {
       font-family: var(--sans);
-      font-size: 0.92rem;
+      font-size: var(--nav-fs);
+      white-space: nowrap;
       font-weight: 500;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -119,13 +124,14 @@
 
     .topnav-links {
       display: flex;
-      gap: 28px;
+      gap: var(--nav-gap);
       align-items: center;
       flex-shrink: 0;
     }
     .topnav-links a {
       font-family: var(--sans);
-      font-size: 0.92rem;
+      font-size: var(--nav-fs);
+      white-space: nowrap;
       font-weight: 500;
       letter-spacing: 0.13em;
       text-transform: uppercase;
@@ -142,8 +148,10 @@
       background: var(--accent);
       transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .topnav-links a:hover { color: var(--accent); }
-    .topnav-links a:hover::after { width: 100%; }
+    .topnav-links a:hover, .topnav-links a:focus-visible { color: var(--accent); }
+    .topnav-links a:hover::after, .topnav-links a:focus-visible::after { width: 100%; }
+    .topnav-links a:focus-visible { outline: none; }
+    .topnav-links a:active { opacity: 0.7; }
     .topnav-links a.nav-active { color: var(--accent); }
     .topnav-links a.nav-active::after { width: 100%; }
 
@@ -210,11 +218,17 @@
     .mobile-menu-link:last-child { border-bottom: none; }
     .mobile-menu-link:hover { color: var(--accent); }
 
+    /* Center descriptor only fits next to the tabs on wide screens */
+    @media (max-width: 1200px) {
+      .topnav-descriptor { display: none; }
+    }
+    /* Too narrow for readable tabs: collapse them into the hamburger */
     @media (max-width: 640px) {
       .topnav-descriptor { display: none; }
       .topnav-links { display: none !important; }
       .topnav-hamburger { display: flex; }
       .mobile-menu { display: flex; }
+      .topnav { --nav-fs: clamp(11px, 3.6vw, 0.92rem); }
     }
 
     /* === HERO === */
@@ -650,6 +664,161 @@
     }
     .cv-btn:hover { background: var(--ink); color: var(--cream); }
 
+    /* === PORTFOLIO === */
+    .portfolio { border-top: 1px solid var(--line); }
+    .portfolio-intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .portfolio-intro .section-heading { margin-bottom: 0; }
+    .portfolio-intro p {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 420px;
+      margin-top: 14px;
+    }
+    .gh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border: 1px solid var(--ink);
+      font-family: var(--sans);
+      font-size: 0.73rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      transition: background 0.22s, color 0.22s, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gh-link:hover, .gh-link:focus-visible { background: var(--ink); color: var(--cream); }
+    .gh-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .gh-link:active { transform: scale(0.97); }
+
+    .project {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: 56px;
+      align-items: center;
+      padding: 48px 0;
+      border-top: 1px solid var(--line);
+    }
+    .project-meta {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .project-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 3.4vw, 46px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    .project-summary {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .project-detail {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+      list-style: none;
+      padding: 0;
+    }
+    .project-tags li {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 5px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+    }
+    .project-links { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+    .project-link {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .project-link:hover, .project-link:focus-visible { color: var(--accent); border-color: var(--ink); }
+    .project-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .project-link:active { opacity: 0.7; }
+
+    .project-media { display: flex; flex-direction: column; gap: 16px; }
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--ink);
+      box-shadow: 0 1px 3px rgba(26,23,20,0.08), 0 24px 48px -20px rgba(122,94,70,0.35);
+    }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .shots img, .shots video {
+      width: 100%;
+      aspect-ratio: 588 / 1280;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(26,23,20,0.06), 0 12px 28px -16px rgba(122,94,70,0.3);
+    }
+    .phone-demo {
+      justify-self: center;
+      width: min(300px, 100%);
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(26,23,20,0.08), 0 30px 60px -24px rgba(122,94,70,0.4);
+    }
+    .phone-demo img { width: 100%; height: auto; display: block; border-radius: 28px; }
+    @media (max-width: 900px) {
+      .project { grid-template-columns: 1fr; gap: 32px; }
+      .project-media { order: 2; }
+    }
+    @media (max-width: 640px) {
+      .project { padding: 36px 0; }
+      .shots { gap: 8px; }
+      .phone-demo { width: min(260px, 100%); }
+    }
+
     /* === EDUCATION === */
     .education { border-top: 1px solid var(--line); }
 
@@ -1031,6 +1200,7 @@
     <span class="topnav-descriptor">(Product Manager &amp; Builder.)</span>
     <nav class="topnav-links" id="topnav-links" aria-label="Page navigation">
       <a href="#way-of-working">Way of Working</a>
+      <a href="#portfolio">Portfolio</a>
       <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -1041,6 +1211,7 @@
   <!-- Mobile menu overlay -->
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <a href="#way-of-working" class="mobile-menu-link">Way of Working</a>
+    <a href="#portfolio" class="mobile-menu-link">Portfolio</a>
     <a href="#cv" class="mobile-menu-link">CV</a>
     <a href="#contact" class="mobile-menu-link">Contact</a>
   </div>
@@ -1099,12 +1270,16 @@
         <p>Before product management, I advised companies from Brazil and Chile at Bain & Company. Colombian by heart, I've lived and worked across Brazil, Mexico, Taiwan, and Colombia.</p>
       </div>
       <div class="bio-facts reveal d3">
+        <div class="bio-fact"><span class="dot"></span><span>You can find me at a modern art museum or a cozy coffee shop</span></div>
+        <div class="bio-fact"><span class="dot"></span><span>Building with AI (Claude &amp; GitHub), including this site</span></div>
         <div class="bio-fact"><span class="dot"></span><span>Classical ballet for 12 years</span></div>
         <div class="bio-fact"><span class="dot"></span><span>Pilates, Yoga, Hiking and any extreme, fun sports</span></div>
         <div class="bio-fact"><span class="dot"></span><span>Love dogs, nature & beach</span></div>
         <div class="bio-fact"><span class="dot"></span><span>Obsessed with my Fujifilm X100VI</span></div>
         <div class="bio-fact"><span class="dot"></span><span>Want to transform mental/physical health in LatAm</span></div>
-        <div class="bio-fact"><span class="dot"></span><span>You can find me at an art museum or a coffee shop</span></div>
+        <div class="bio-fact"><span class="dot"></span><span>Into wearables &amp; health data (3+ devices tracked)</span></div>
+        <div class="bio-fact"><span class="dot"></span><span>Self-proclaimed cheesecake taster</span></div>
+        <div class="bio-fact"><span class="dot"></span><span>Love playful interior design</span></div>
       </div>
     </div>
   </section>
@@ -1212,6 +1387,69 @@
       </div>
     </div>
     <div style="height: 80px; background: var(--warm-bg);"></div>
+  </section>
+
+  <!-- ── PORTFOLIO ── -->
+  <section class="section portfolio" id="portfolio">
+    <div class="section-inner">
+      <div class="portfolio-intro">
+        <div>
+          <span class="section-label reveal">Things I've built</span>
+          <h2 class="section-heading reveal d1">Portfolio</h2>
+          <p class="reveal d2">A selection of products I've worked on, from hackathon prototypes to features shipped to millions.</p>
+        </div>
+        <a href="https://github.com/mapagarzon" class="gh-link reveal d2" target="_blank" rel="noopener noreferrer">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          github.com/mapagarzon
+        </a>
+      </div>
+
+      <!-- Peri -->
+      <article class="project reveal">
+        <div class="project-text">
+          <div class="project-meta">VexoHacks · AI Wearables Hackathon</div>
+          <h3 class="project-title">Peri</h3>
+          <p class="project-summary">Peri remembers every promise you make, like buying a gift, paying someone back or hosting an event, using Vexo bands with 24/7 voice recording.</p>
+          <p class="project-detail">Each promise is filed under the right person as money, a gift, a task or a plan. Peri then helps you keep it with reminders, ideas in the chat and, for money, a Venmo payment ready for you to approve. Built with Callie Hou.</p>
+          <ul class="project-tags" aria-label="Built with">
+            <li>Claude</li><li>Deepgram</li><li>SpeechBrain</li><li>ElevenLabs</li><li>Next.js</li><li>Expo</li>
+          </ul>
+          <div class="project-links">
+            <a href="https://devpost.com/software/peri-l2ixcm" class="project-link" target="_blank" rel="noopener noreferrer">Devpost ↗</a>
+            <a href="https://www.youtube.com/watch?v=cMO3t2m9fFo" class="project-link" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>
+            <a href="https://github.com/calliehou/AI-wearable-hackathon" class="project-link" target="_blank" rel="noopener noreferrer">Code ↗</a>
+          </div>
+        </div>
+        <div class="project-media">
+          <div class="video-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/cMO3t2m9fFo?rel=0" title="Peri product video" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+          </div>
+          <div class="shots">
+            <video src="brand_assets/Peri/peri-demo.mp4" poster="brand_assets/Peri/peri-demo-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Peri demo: keeping a money promise by paying in Venmo"></video>
+            <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/005/902/248/datas/original.PNG" alt="Peri app: My orbit view with people and promises due today" loading="lazy">
+            <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/005/902/244/datas/original.PNG" alt="Peri app: Ask Peri suggestions" loading="lazy">
+          </div>
+        </div>
+      </article>
+
+      <!-- Split Payments -->
+      <article class="project reveal">
+        <div class="project-text">
+          <div class="project-meta">Nubank Brasil · Credit Card Financing</div>
+          <h3 class="project-title">Split Payments</h3>
+          <p class="project-summary">One Pix, two funding sources. Customers can pay a single Pix using their account balance and their credit card limit at the same time, instead of splitting it into two separate transfers.</p>
+          <p class="project-detail">I led the product from concept to launch in Brazil: tested different versions of the experience with customers, listened to their feedback, and scaled it once it proved valuable as a practical tool for tight moments.</p>
+          <ul class="project-tags" aria-label="Product area">
+            <li>Pix</li><li>Credit card</li><li>Payments</li><li>A/B testing</li>
+          </ul>
+        </div>
+        <div class="project-media">
+          <div class="phone-demo">
+            <img src="brand_assets/Pix%20Financing%20BR/mfs-demo.gif" alt="Demo of paying a Pix with balance and credit card limit together in the Nubank app" loading="lazy" width="488" height="866">
+          </div>
+        </div>
+      </article>
+    </div>
   </section>
 
   <!-- ── EXPERIENCE ── -->
